@@ -1,61 +1,61 @@
 <div class="todoapp">
-  <h1 class="todoapp__title">todos {{todos.length}}</h1>
+  <h1 class="todoapp__title">todos {{ todos.length }}</h1>
 
   <div class="todoapp__content">
     <header class="todoapp__header">
       <button class="todoapp__toggle-all active"></button>
 
-      <form>
+      <form [formGroup]="todosForm" (ngSubmit)="onAdd()">
         <input
           type="text"
           class="todoapp__new-todo"
           placeholder="What needs to be done?"
+          formControlName="typing"
+          [style.backgroundColor]="typing.errors && typing.touched ? '#f88' : ''"
         />
       </form>
     </header>
 
     <section class="todoapp__main">
-      <div class='todo completed' *ngFor="let todo of todos">
+      <div
+        class='todo'
+        [class.completed]="todo.completed"
+        *ngFor="
+          let todo of todos;
+          let i = index;
+        "
+      >
         <label class="todo__status-label">
           <input
             type="checkbox"
             class="todo__status"
-            checked
+            [(ngModel)]="todo.completed"
           />
         </label>
 
-        <span class="todo__title">
-          {{todo.title}}
-        </span>
+        <ng-template #formElseBlock>
+          <span class="todo__title">
+            {{ todo.title }}
+          </span>
+    
+          <button
+            type="button"
+            class="todo__remove"
+            (click)="todos.splice(i, 1)"
+          >
+            ×
+          </button>
+        </ng-template>
 
-        <button type="button" class="todo__remove">
-          ×
-        </button>
-
-        <div class="modal overlay is-active">
-          <div class="modal-background has-background-white-ter"></div>
-          <!-- <div class="loader"></div> -->
-        </div>
-      </div>
-
-      <div class='todo'>
-        <label class="todo__status-label">
+        <form *ngIf="isEditing; else formElseBlock">
           <input
-            type="checkbox"
-            class="todo__status"
-            checked
-          />
-        </label>
+            type="text"
+            class="todo__title-field"
+            placeholder="Enter your value"
+          >
+        </form>
 
-        <span class="todo__title">
-          NOT Completed todo
-        </span>
-
-        <button type="button" class="todo__remove">
-          ×
-        </button>
-
-        <div class="modal overlay is-active">
+        <div class="modal overlay is-active" [class.is-active]="false">
           <div class="modal-background has-background-white-ter"></div>
           <div class="loader"></div>
         </div>
@@ -64,27 +64,27 @@
 
     <footer class="todoapp__footer">
       <span class="todo-count">
-        0 items left
+        {{ activeTodos.length }} items left
       </span>
 
       <nav class="filter">
         <a
           href="#/"
-          class='filter__link',
+          class='filter__link'
         >
           All
         </a>
 
         <a
           href="#/"
-          class='filter__link',
+          class='filter__link'
         >
           ACTIVE
         </a>
 
         <a
           href="#/"
-          class='filter__link',
+          class='filter__link'
         >
           COMPLETED
         </a>
@@ -92,8 +92,7 @@
 
       <button
         type="button"
-        class='todoapp__clear-completed',
-        onClick={clearCompleted}
+        class='todoapp__clear-completed'
       >
         Clear completed
       </button>

@@ -1,0 +1,48 @@
+<div
+  class='todo'
+  [class.completed]="todo.completed"
+>
+  <label class="todo__status-label">
+    <input
+      type="checkbox"
+      class="todo__status"
+      [checked]="todo.completed"
+      (change)="toggle.emit()"
+    />
+  </label>
+
+  <ng-template #formElseBlock>
+    <span
+      class="todo__title"
+      (dblclick)="onEdit()"
+    >
+      {{ todo.title }}
+    </span>
+
+    <button
+      type="button"
+      class="todo__remove"
+      (click)="remove.emit()"
+    >
+      ×
+    </button>
+  </ng-template>
+
+  <form *ngIf="isEditing; else formElseBlock" (ngSubmit)="onSave()">
+    <input
+      #titleInput
+      type="text"
+      class="todo__title-field"
+      name="title"
+      placeholder="Enter your value"
+      [(ngModel)]="title"
+      (keyup.escape)="isEditing = false"
+      (blur)="onSave()"
+    >
+  </form>
+
+  <div class="modal overlay is-active" [class.is-active]="false">
+    <div class="modal-background has-background-white-ter"></div>
+    <div class="loader"></div>
+  </div>
+</div>

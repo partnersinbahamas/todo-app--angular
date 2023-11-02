@@ -1,0 +1,9 @@
+<form [formGroup]="todosForm" (ngSubmit)="handleFormSubmit()">
+  <input
+    type="text"
+    class="todoapp__new-todo"
+    placeholder="What needs to be done?"
+    formControlName="typing"
+    [style.backgroundColor]="typing.errors && typing.touched ? '#f88' : ''"
+  />
+</form>

@@ -5,61 +5,17 @@
     <header class="todoapp__header">
       <button class="todoapp__toggle-all active"></button>
 
-      <form [formGroup]="todosForm" (ngSubmit)="onAdd()">
-        <input
-          type="text"
-          class="todoapp__new-todo"
-          placeholder="What needs to be done?"
-          formControlName="typing"
-          [style.backgroundColor]="typing.errors && typing.touched ? '#f88' : ''"
-        />
-      </form>
+      <app-todo-form (save)="onAdd($event)"></app-todo-form>
     </header>
 
     <section class="todoapp__main">
-      <div
-        class='todo'
-        [class.completed]="todo.completed"
-        *ngFor="
-          let todo of todos;
-          let i = index;
-        "
-      >
-        <label class="todo__status-label">
-          <input
-            type="checkbox"
-            class="todo__status"
-            [(ngModel)]="todo.completed"
-          />
-        </label>
-
-        <ng-template #formElseBlock>
-          <span class="todo__title">
-            {{ todo.title }}
-          </span>
-    
-          <button
-            type="button"
-            class="todo__remove"
-            (click)="todos.splice(i, 1)"
-          >
-            ×
-          </button>
-        </ng-template>
-
-        <form *ngIf="isEditing; else formElseBlock">
-          <input
-            type="text"
-            class="todo__title-field"
-            placeholder="Enter your value"
-          >
-        </form>
-
-        <div class="modal overlay is-active" [class.is-active]="false">
-          <div class="modal-background has-background-white-ter"></div>
-          <div class="loader"></div>
-        </div>
-      </div>
+      <app-todo
+        *ngFor="let todo of todos; let i = index; trackBy: trackById"
+        [todo]="todo"
+        (remove)="onTodoRemove(todo.id)"
+        (rename)="onTodoRename(todo.id, $event)"
+        (toggle)="onTodoToggle(todo.id)"
+      ></app-todo>
     </section>
 
     <footer class="todoapp__footer">

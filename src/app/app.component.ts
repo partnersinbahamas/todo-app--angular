@@ -2,19 +2,13 @@ import { AfterContentChecked, ChangeDetectionStrategy, Component, OnInit } from 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { getUniqId } from 'src/helpers/functions';
 import { Todo } from 'src/Types/Todo';
-
-const todosFromServer: Todo[] = [
-  { id: 1, title: 'HTML + CSS', completed: true },
-  { id: 2, title: 'JS + TS', completed: false },
-  { id: 3, title: 'React', completed: false },
-  { id: 4, title: 'Angular', completed: false },
-];
+import { TodoService } from './services/todo.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class AppComponent implements OnInit {
@@ -37,9 +31,16 @@ export class AppComponent implements OnInit {
 
   isEditing = false;
 
-  constructor () {}
+  constructor (
+    private TodoService: TodoService,
+  ) {}
+
   ngOnInit(): void {
-    this.todos = todosFromServer;
+    this.TodoService.getTodos()
+      .subscribe((todos: Todo[]) => {
+        console.log(todos);
+        this.todos = todos
+      })
   }
 
   trackById(i: number, todo: Todo) {
@@ -47,15 +48,24 @@ export class AppComponent implements OnInit {
   }
 
   onAdd(newTitle: string) {
-    let newId = getUniqId(this.todos);
+    const newId = getUniqId(this.todos);
+    console.log('id: ', newId);
 
-    let newTodo: Todo = {
-      id: newId,
+    const newTodo: Todo = {
+      id: new Date().getSeconds(),
       title: newTitle,
       completed: false,
     };
 
-    this.todos = [...this.todos, newTodo];
+    console.log(newTodo);
+
+    this.TodoService.createTodo(newTodo)
+      .subscribe((todo: Todo) => {
+        this.TodoService.getTodos()
+          .subscribe((todos: Todo[]) => {
+            this.todos = todos;
+          })
+      })
   }
 
   onTodoRename(todoId: number, title: string) {
@@ -79,6 +89,9 @@ export class AppComponent implements OnInit {
   };
 
   onTodoRemove(todoId: number) {
-    this.todos = [...this.todos].filter((todo: Todo) => todo.id !== todoId);
+    return this.TodoService.removeTodo(todoId)
+      .subscribe((todoAPI: Todo) => {
+        this.todos = [...this.todos].filter((todo: Todo) => todo.id !== todoId);
+      })
   }
 }

@@ -1,8 +1,10 @@
 <div
-  class='todo'
-  [class.completed]="todo.completed"
+  [class]="{
+    completed: todo.completed,
+    todo: true
+  }"
 >
-  <label class="todo__status-label">
+  <label class="todo__status-label"> 
     <input
       type="checkbox"
       class="todo__status"

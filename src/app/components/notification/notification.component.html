@@ -1,0 +1,16 @@
+<div
+class='message is-danger'
+[class.message--hidden]="isHidden"
+>
+  <div class="message-header">
+    <p>{{ title }}</p>
+
+    <button
+      type="button"
+      class="delete"
+      (click)="isHidden = true"
+    ></button>
+  </div>
+
+  <p class="message-body">{{ message }}</p>
+</div>

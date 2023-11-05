@@ -17,6 +17,8 @@
     <span
       class="todo__title"
       (dblclick)="onEdit()"
+      (keyup.escape)="isEditing = false"
+      (blur)="onSave()"
     >
       {{ todo.title }}
     </span>

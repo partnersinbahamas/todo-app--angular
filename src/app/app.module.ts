@@ -7,12 +7,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TodoComponent } from './components/todo/todo.component';
 import { TodoFormComponent } from './components/todo-form/todo-form.component';
 import { HttpClientModule } from '@angular/common/http';
+import { NotificationComponent } from './components/notification/notification.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TodoComponent,
     TodoFormComponent,
+    NotificationComponent,
   ],
   imports: [
     BrowserModule,

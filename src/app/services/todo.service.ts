@@ -1,13 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, ReplaySubject, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
 import { Todo } from 'src/Types/Todo';
-
-const todosFromServer: Todo[] = [
-  { id: 1, title: 'HTML + CSS', completed: true },
-  { id: 2, title: 'JS + TS', completed: false },
-  { id: 3, title: 'React', completed: false },
-  { id: 4, title: 'Angular', completed: false },
-];
 
 const API_USER_ID = 3;
 const BASE_URL = 'https://mate.academy/students-api';
@@ -15,21 +9,60 @@ const BASE_URL = 'https://mate.academy/students-api';
 @Injectable({
   providedIn: 'root'
 })
-export class TodoService {
+export class todoService {
+  private todos$$ = new BehaviorSubject<Todo[]>([]);
+  todos$ = this.todos$$.asObservable();
 
   constructor(
     private http: HttpClient,
   ) {}
 
-  getTodos() {
-    return this.http.get<Todo[]>(`${BASE_URL}/todos`)
+  loadTodos() {
+    return this.http.get<Todo[]>(`${BASE_URL}/todo`)
+      .pipe(
+        tap((todos) => {
+          this.todos$$.next(todos);
+        }),
+      );
   }
 
-  createTodo(newTodo: Todo) {
-    return  this.http.post<Todo>(`${BASE_URL}/todos`, newTodo)
+  createTodo(todo: Todo) {
+    return this.http.post<Todo>(`${BASE_URL}/todo`, todo)
+      .pipe(
+        withLatestFrom(this.todos$$),
+        tap(([newTodo, todos]) => {
+          this.todos$$.next([...todos, newTodo]);
+        }),
+      );
   }
 
-  removeTodo(todoId: number) {
-    return this.http.delete<Todo>(`${BASE_URL}/todos/${todoId}`)
+  updateTodo(toUpdateTodo: Todo) {
+    return this.http.patch<Todo>(`${BASE_URL}/todos/${toUpdateTodo.id}`, toUpdateTodo)
+      .pipe(
+        withLatestFrom(this.todos$$),
+        tap(([updatedTodo, todos]) => {
+          this.todos$$.next(
+            todos.map((todo: Todo) => {
+              if (todo.id === toUpdateTodo.id) {
+                return updatedTodo;
+              }
+
+              return todo;
+            })
+          );
+        }),
+      );
+  }
+
+  removeTodo({id}: Todo) {
+    return this.http.delete<Todo>(`${BASE_URL}/todos/${id}`)
+      .pipe(
+        withLatestFrom(this.todos$$),
+        tap(([_, todos]) => {
+          this.todos$$.next(
+            [...todos].filter((todo: Todo) => todo.id !== id)
+          )
+        })
+      )
   }
 }

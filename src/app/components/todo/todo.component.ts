@@ -33,7 +33,7 @@ export class TodoComponent {
       return;
     };
 
-    // this.isEditing = false;
+    this.isEditing = false;
     this.rename.emit(this.title);
   }
 }

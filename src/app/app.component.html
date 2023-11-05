@@ -12,9 +12,9 @@
       <app-todo
         *ngFor="let todo of todos; let i = index; trackBy: trackById"
         [todo]="todo"
-        (remove)="onTodoRemove(todo.id)"
-        (rename)="onTodoRename(todo.id, $event)"
-        (toggle)="onTodoToggle(todo.id)"
+        (remove)="onTodoRemove(todo)"
+        (rename)="onTodoRename(todo, $event)"
+        (toggle)="onTodoToggle(todo)"
       ></app-todo>
     </section>
 
@@ -55,11 +55,5 @@
     </footer>
   </div>
 
-  <div class='notification is-danger is-light has-text-weight-normal'>
-    <button
-      type="button"
-      class="delete"
-    >
-    </button>
-  </div>
+  <app-notification></app-notification>
 </div>

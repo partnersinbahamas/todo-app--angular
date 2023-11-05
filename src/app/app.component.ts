@@ -2,7 +2,8 @@ import { AfterContentChecked, ChangeDetectionStrategy, Component, OnInit } from 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { getUniqId } from 'src/helpers/functions';
 import { Todo } from 'src/Types/Todo';
-import { TodoService } from './services/todo.service';
+import { todoService } from './services/todo.service';
+import { MessageService } from './services/message.service';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +16,8 @@ export class AppComponent implements OnInit {
   title = 'todo-app--angular';
   _todos: Todo[] = [];
   activeTodos: Todo[] = [];
+
+  message = '';
 
   get todos() {
     return this._todos;
@@ -32,14 +35,20 @@ export class AppComponent implements OnInit {
   isEditing = false;
 
   constructor (
-    private TodoService: TodoService,
+    private todoService: todoService,
+    private messageService: MessageService,
   ) {}
 
+
   ngOnInit(): void {
-    this.TodoService.getTodos()
-      .subscribe((todos: Todo[]) => {
-        console.log(todos);
-        this.todos = todos
+    this.todoService.todos$
+      .subscribe(todos => this.todos = todos);
+
+    this.todoService.loadTodos()
+      .subscribe({
+        error: () => {
+          this.messageService.showMessage('Unable to load todos.')
+        }
       })
   }
 
@@ -55,43 +64,41 @@ export class AppComponent implements OnInit {
       id: new Date().getSeconds(),
       title: newTitle,
       completed: false,
+      userId: 3,
     };
 
-    console.log(newTodo);
-
-    this.TodoService.createTodo(newTodo)
-      .subscribe((todo: Todo) => {
-        this.TodoService.getTodos()
-          .subscribe((todos: Todo[]) => {
-            this.todos = todos;
-          })
-      })
+    this.todoService.createTodo(newTodo)
+      .subscribe({
+        error: () => {
+          this.messageService.showMessage('Unable to create todo.')
+        }
+      });
   }
 
-  onTodoRename(todoId: number, title: string) {
-    this.todos = this.todos.map((todo: Todo) => {
-      if (todo.id !== todoId) {
-        return todo;
-      }
-
-      return { ...todo, title };
-    });
+  onTodoRename(todo: Todo, title: string) {
+    return this.todoService.updateTodo({ ...todo, title, })
+      .subscribe({
+        error: () => {
+          this.messageService.showMessage('Unable to update todo');
+        }
+      });
   };
 
-  onTodoToggle(todoId: number) {
-    this.todos = this.todos.map((todo: Todo) => {
-      if (todo.id === todoId) {
-        return { ...todo, completed: !todo.completed }
-      };
-
-      return todo;
-    })
+  onTodoToggle(todo: Todo) {
+    return this.todoService.updateTodo({ ...todo, completed: !todo.completed })
+      .subscribe({
+        error: () => {
+          this.messageService.showMessage('Unable to update todo');
+        }
+      });
   };
 
-  onTodoRemove(todoId: number) {
-    return this.TodoService.removeTodo(todoId)
-      .subscribe((todoAPI: Todo) => {
-        this.todos = [...this.todos].filter((todo: Todo) => todo.id !== todoId);
-      })
+  onTodoRemove(todo: Todo) {
+    return this.todoService.removeTodo(todo)
+      .subscribe({
+        error: () => {
+          this.messageService.showMessage('Unable to remove todo')
+        }
+      });
   }
 }

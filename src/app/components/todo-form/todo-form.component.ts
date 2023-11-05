@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { Todo } from 'src/Types/Todo';
 
 @Component({
   selector: 'app-todo-form',
@@ -12,10 +14,6 @@ export class TodoFormComponent {
   todosForm = new FormGroup({
     typing: new FormControl('', {
       nonNullable: true,
-      validators: [
-        Validators.required,
-        Validators.minLength(3),
-      ]
     }),
   });
 

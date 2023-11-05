@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, ReplaySubject, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
 import { Todo } from 'src/Types/Todo';
 
-const API_USER_ID = 3;
+export const API_USER_ID = 6548;
 const BASE_URL = 'https://mate.academy/students-api';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class todoService {
   ) {}
 
   loadTodos() {
-    return this.http.get<Todo[]>(`${BASE_URL}/todo`)
+    return this.http.get<Todo[]>(`${BASE_URL}/todos?userId=${API_USER_ID}`)
       .pipe(
         tap((todos) => {
           this.todos$$.next(todos);
@@ -27,7 +27,7 @@ export class todoService {
   }
 
   createTodo(todo: Todo) {
-    return this.http.post<Todo>(`${BASE_URL}/todo`, todo)
+    return this.http.post<Todo>(`${BASE_URL}/todos`, todo)
       .pipe(
         withLatestFrom(this.todos$$),
         tap(([newTodo, todos]) => {

@@ -8,6 +8,12 @@ body {
   margin: 0 auto;
 }
 
+.nav {
+  display: flex;
+  gap: 15px;
+  justify-content: center
+}
+
 @import "./todoapp";
 @import "./todo";
 @import "./filter";

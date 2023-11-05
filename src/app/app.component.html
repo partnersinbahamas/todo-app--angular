@@ -1,59 +1,8 @@
-<div class="todoapp">
-  <h1 class="todoapp__title">todos {{ todos.length }}</h1>
+<section class="todoapp">
+  <nav class="nav">
+    <a routerLink="/todo">Todos</a>
+    <a routerLink="/about">About</a>
+  </nav>
 
-  <div class="todoapp__content">
-    <header class="todoapp__header">
-      <button class="todoapp__toggle-all active"></button>
-
-      <app-todo-form (save)="onAdd($event)"></app-todo-form>
-    </header>
-
-    <section class="todoapp__main">
-      <app-todo
-        *ngFor="let todo of todos; let i = index; trackBy: trackById"
-        [todo]="todo"
-        (remove)="onTodoRemove(todo)"
-        (rename)="onTodoRename(todo, $event)"
-        (toggle)="onTodoToggle(todo)"
-      ></app-todo>
-    </section>
-
-    <footer class="todoapp__footer">
-      <span class="todo-count">
-        {{ activeTodos.length }} items left
-      </span>
-
-      <nav class="filter">
-        <a
-          href="#/"
-          class='filter__link'
-        >
-          All
-        </a>
-
-        <a
-          href="#/"
-          class='filter__link'
-        >
-          ACTIVE
-        </a>
-
-        <a
-          href="#/"
-          class='filter__link'
-        >
-          COMPLETED
-        </a>
-      </nav>
-
-      <button
-        type="button"
-        class='todoapp__clear-completed'
-      >
-        Clear completed
-      </button>
-    </footer>
-  </div>
-
-  <app-notification></app-notification>
-</div>
+  <router-outlet></router-outlet>
+</section>

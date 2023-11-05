@@ -1,0 +1,20 @@
+.about {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__txt {
+    font-size: 16px;
+
+    &_strong {
+      font-weight: 400;
+    }
+  }
+
+  &__list {
+    list-style: circle;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+}

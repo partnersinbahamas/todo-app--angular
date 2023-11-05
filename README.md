@@ -1,27 +1,27 @@
-# TodoAppAngular
+# TodoApp `Angular`
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.8.
+[DEMOLINK](https://partnersinbahamas.github.io/todo-app--angular/)
 
-## Development server
+`TodoApp` is a task management application developed using Angular, TypeScript, JavaScript, HTML, CSS, Sass, and following the BEM methodology. The application utilizes various Angular features and concepts:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- `NgModel` and `ReactiveForms`: Used for managing data and forms within the application.
 
-## Code scaffolding
+- `Input`, `Output`, and `EventEmitter`: Enabling data exchange between parent and child components.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- `ViewChild`: Providing access to DOM elements from within components.
 
-## Build
+- `Life Cycle Methods`: Used for managing the lifecycle of components, such as ngOnInit, ngOnDestroy, and others.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- `Change Detection Strategy`: Employed for optimizing performance by controlling change detection.
 
-## Running unit tests
+- `Pipes`: Used for data transformation in templates, such as date formatting.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- `Services`: Organized to handle business logic and data exchange between components.
 
-## Running end-to-end tests
+- `Observables` and `Subjects`: Leveraged for asynchronous programming and managing data streams.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+- `Router`: Facilitating navigation between different parts of the application and supporting routing.
 
-## Further help
+- `Lazy Loading`: Implemented to optimize application loading by dynamically loading parts of the application as needed.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+This application allows users to create, update, delete, and mark tasks as completed, as well as view them in various modes (active, completed) and filter them by status.
